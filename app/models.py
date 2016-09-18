@@ -1,4 +1,4 @@
-
+from . import db
 class Role(object):
 
     pass
