@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky {% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Blogs</h1>
+   <div row>
+
+    <p> <a href="{{url_for('main.add')}}"> Add new blog </p>>
+   </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+              <thead>
+                <tr>
+
+                  <th>Title</th>
+                  <th>Body</th>
+                  <th>Status</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for entry in  entries %}
+                <tr>
+                  <td>{{entry.title}}</td>
+                  <td>{{entry.body}}</td>
+                  <td>{{entry.status}}</td>
+
+                </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+    </div>
+
+
+
+
+</div>
+{% endblock %}
+
