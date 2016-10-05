@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
+    SubmitField , HiddenField
 from wtforms.validators import Required, Length, Email, Regexp , DataRequired
 from wtforms import ValidationError
 from flask_pagedown.fields import PageDownField
@@ -13,8 +13,9 @@ class NameForm(Form):
 
 
 class EntryForm(Form):
+
     title = StringField('Title' , validators=[DataRequired()])
-    body = TextAreaField('Body')
+    body = TextAreaField('Body'  )
     status = SelectField(
         'Entry status',
         choices=(
@@ -26,3 +27,13 @@ class EntryForm(Form):
         self.populate_obj(entry)
 
         return entry
+
+
+class EditEntryForm(EntryForm):
+
+    id = HiddenField('id')
+
+
+
+
+

@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import request, render_template, session, redirect, url_for
 
 from . import main
-from .forms import NameForm , EntryForm
+from .forms import NameForm , EntryForm , EditEntryForm
 
 from ..models import  Role, User , Entry ,db
 
@@ -36,12 +36,41 @@ def add():
             db.session.commit()
             return redirect(url_for('main.blog'))
         else:
-            form = EntryForm()
-        return render_template('create_entry.html', form=form)
+
+            return render_template('create_entry.html', form=form)
 
     else:
         form = EntryForm()
         return render_template('create_entry.html', form=form)
+
+
+
+
+
+@main.route('/edit/<int:id>', methods=['GET', 'POST'] )
+def edit(id):
+    if request.method == 'POST':
+        form = EditEntryForm(request.form)
+        if form.validate():
+            entry = db.session.query(Entry).get(id)
+            if entry:
+                entry.title = form.title.data
+                entry.body = form.body.data
+                entry.status = form.status.data
+                db.session.commit()
+            return redirect(url_for('main.blog'))
+        else:
+            return render_template('edit_entry.html', form=form)
+
+    else:
+        form = EditEntryForm()
+        entry = db.session.query(Entry).get(id)
+        form.id.data = entry.id
+        form.title.data = entry.title
+        form.body.data = entry.body
+        form.status.data = entry.status
+        return render_template('edit_entry.html', form=form)
+
 
 
 
