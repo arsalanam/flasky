@@ -1,9 +1,9 @@
 from datetime import datetime
-from flask import request, render_template, session, redirect, url_for
+from flask import request, render_template, session, redirect, url_for , flash
 
 from . import main
-from .forms import NameForm , EntryForm , EditEntryForm
-
+from .forms import NameForm , EntryForm , EditEntryForm , LoginForm
+from flask_login import login_user, logout_user
 from ..models import  Role, User , Entry ,db
 
 
@@ -74,3 +74,23 @@ def edit(id):
 
 
 
+@main.route("/login/", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        form = LoginForm(request.form)
+        if form.validate():
+            login_user(form.user, remember=form.remember_me.data)
+            flash("Successfully logged in as %s." % form.user.email, "success")
+            return redirect(request.args.get("next") or url_for("main.index"))
+        else:
+            flash("User %s not found." % form.email.data, "failure")
+            return render_template("login.html", form=form)
+    else:
+        form = LoginForm()
+        return render_template("login.html", form=form)
+
+@main.route("/logout/")
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(request.args.get('next') or url_for('main.index'))
