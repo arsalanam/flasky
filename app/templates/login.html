@@ -4,6 +4,8 @@
 {% block content_title %}Log in{% endblock %}
 {% block page_content %}
 <form action="{{ url_for('main.login', next=request.args.get('next','')) }}" class="form form-horizontal" method="post">
+     {{ form.hidden_tag() }}
+       {{ form.id }}
 {{ form_field(form.email) }}
 {{ form_field(form.password) }}
 <div class="form-group">

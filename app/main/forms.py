@@ -36,8 +36,7 @@ class EditEntryForm(EntryForm):
 from ..models import User
 
 class LoginForm(Form):
-    email = StringField("Email",
-        validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Password",
         validators=[DataRequired()])
     remember_me = BooleanField("Remember me?",

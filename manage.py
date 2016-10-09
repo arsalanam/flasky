@@ -8,17 +8,15 @@ from app import create_app, db
 from flask import g
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
-from flask_login import LoginManager , current_user
+from flask_login import  current_user
 
 from flask_bcrypt import Bcrypt
+
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
 bcrypt = Bcrypt(app)
-
 
 @app.before_request
 def _before_request():

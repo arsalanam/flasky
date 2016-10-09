@@ -1,7 +1,8 @@
 import datetime, re
 
 from . import db
-from manage import bcrypt , login_manager
+from manage import bcrypt
+from . import login_manager
 
 
 class Role(object):
@@ -26,6 +27,7 @@ class Entry(db.Model):
                                    default=datetime.datetime.now,
                                    onupdate=datetime.datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
 
     def  __init__(self, title=None, body=None, status=None):
 
@@ -59,11 +61,11 @@ class User(db.Model):
 
     def generate_slug(self):
         if self.name:
-            self.slug = slugify(self.name)
+            self.slug = "slug"
 
     # Flask-Login interface..
     def get_id(self):
-        return unicode(self.id)
+        return self.id
 
     def is_authenticated(self):
         return True
