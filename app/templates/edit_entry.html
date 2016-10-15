@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/form_field.html" import form_field %}
 
 {% block title %}Flasky {% endblock %}
 
@@ -7,68 +8,40 @@
     <h1>Edit blog</h1>
 </div>
 
-   <form action="{{ url_for('main.edit' , id=form.id.data) }}" class="form form- horizontal" method="post">
-       {{ form.hidden_tag() }}
-       {{ form.id }}
-        <row>
-           <div class="form-group">
+<div class="container">
 
-               <label for="titleTextBox">{{ form.title.label() }}</label>
+    <div class="row">
 
 
-                {{ form.title(class="form-control" , size="40", maxlength="80" ) }}
+        <div class="col-md-9">
 
-           </div>
-             {% if form.title.errors %}
-                <ul class="errors">{% for error in form.title.errors %}
-                    <li>{{ error }}</li>{% endfor %}
-                </ul>
-             {% endif %}
+            <form action="{{ url_for('main.edit' , id=form.id.data) }}" class="form form- horizontal" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.id }}
 
-        </row>
-
-        <row>
-           <div class="form-group">
-               <label for="bodyTextBox">{{ form.body.label() }}</label>
-
-               {{ form.body(class="form-control" , rows="3" ,  cols="40") }}
+                {{ form_field(form.title) }}
+                {{ form_field(form.body,  class='form-control', rows=20 ) }}
 
 
-           </div>
-             {% if form.body.errors %}
-                <ul class="errors">{% for error in form.body.errors %}
-                    <li>{{ error }}</li>{% endfor %}
-                </ul>
-             {% endif %}
-
-        </row>
-
-       <row>
-           <div class="form-group">
-
-               <label for="statusTextBox">{{ form.status.label() }}</label>
-               {
-               {{ form.status(class='form-control') }}
+                {{ form_field(form.status) }}
 
 
-           </div>
-             {% if form.status.errors %}
-                <ul class="errors">{% for error in form.status.errors %}
-                    <li>{{ error }}</li>{% endfor %}
-                </ul>
-             {% endif %}
 
-        </row>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn- default">Update</button>
+                        <a class="btn" href="{{ url_for('main.blog') }}">Cancel</a>
+                    </div>
+                </div>
+            </form>
 
-
-        <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
-            <button type="submit" class="btn btn- default">Update</button>
-            <a class="btn" href="{{ url_for('main.blog') }}">Cancel</a>
-          </div>
         </div>
-  </form>
 
+
+    </div>
+
+
+</div>
 
 
 

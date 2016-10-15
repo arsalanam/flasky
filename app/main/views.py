@@ -1,9 +1,9 @@
 from datetime import datetime
-from flask import request, render_template, session, redirect, url_for , flash
+from flask import request, render_template, session, redirect, url_for , flash ,g
 
 from . import main
 from .forms import NameForm , EntryForm , EditEntryForm , LoginForm
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user ,current_user , login_required
 from ..models import  Role, User , Entry ,db
 
 
@@ -20,18 +20,23 @@ def index():
 
 @main.route('/blog/' , methods=['GET', 'POST'] )
 def blog():
-    entries = Entry.query.all()
+    if g.user.is_authenticated:
+        entries= db.session.query(Entry).filter(Entry.author == g.user).order_by(Entry.created_timestamp.desc())
+    else:
+        entries = db.session.query(Entry).filter(Entry.status == Entry.STATUS_PUBLIC ).order_by(Entry.created_timestamp.desc())
 
     return render_template('blog.html',entries =entries)
 
 
 
 @main.route('/add/', methods=['GET', 'POST'] )
+@login_required
 def add():
     if request.method == 'POST':
         form = EntryForm(request.form)
         if form.validate():
             entry = form.save_entry(Entry())
+            entry.author = g.user
             db.session.add(entry)
             db.session.commit()
             return redirect(url_for('main.blog'))
@@ -48,6 +53,7 @@ def add():
 
 
 @main.route('/edit/<int:id>', methods=['GET', 'POST'] )
+@login_required
 def edit(id):
     if request.method == 'POST':
         form = EditEntryForm(request.form)
@@ -57,6 +63,7 @@ def edit(id):
                 entry.title = form.title.data
                 entry.body = form.body.data
                 entry.status = form.status.data
+                entry.author = g.user
                 db.session.commit()
             return redirect(url_for('main.blog'))
         else:
