@@ -27,7 +27,8 @@
              {% for entry in  entries %}
             <div class="blog-post">
                 <h4 class="blog-post-title">{{entry.title}}</h4>
-                <p class="blog-post-meta">{{ moment(entry.created_timestamp).format('LLL') }}
+                <p class="blog-post-meta">{{ moment(entry.created_timestamp).format('LLLL') }}
+
 
                     {% if g.user.is_authenticated  and (entry.author == g.user) %}
 
@@ -36,7 +37,7 @@
                     {% endif %}
                 </p>
 
-                <p>{{entry.body | markdown}}</p>
+                {{entry.body | markdown}}
             </div>
             {% endfor %}
         </div>
